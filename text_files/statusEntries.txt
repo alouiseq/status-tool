@@ -1,0 +1,461 @@
+USER: aquiatch
+DATE: [Mon May 21 2012 11:32:51]
+TAGS: Yoda, QPB
+ENTRY: hello there
+
+USER: aquiatch
+DATE: [Mon May 21 2012 11:35:51]
+TAGS: Yoda, QPB
+ENTRY: it's nice outside
+
+USER: aquiatch
+DATE: [Mon May 21 2012 13:30:51]
+TAGS: Yoda, QPB
+ENTRY: Completed RTL Stage
+
+USER: aquiatch
+DATE: [Mon May 21 2012 13:30:51]
+TAGS: DV, PAT
+ENTRY: RTL Coding here
+
+USER: aquiatch
+DATE: [Mon May 21 2012 14:53:51]
+TAGS: PD,  BLM,  WCA,  MPE,  SCH,  Antares-E
+ENTRY: Danglers resolved
+
+USER: aquiatch
+DATE: [Tue May 22 2012 09:09:09]
+TAGS: Luke, Antares-C, DFL, TOP, ETC, FBE, DV, PD
+ENTRY: I have finished organizing the blocks. 
+
+USER: aquiatch
+DATE: [Tue May 22 2012 09:10:32]
+TAGS: Luke, Antares-C, DFL, TOP, ETC, FBE, DV, PD
+ENTRY: This is a test to see if cgi execution is allowed through an ajax post call
+
+USER: aquiatch
+DATE: [Tue May 29 2012 16:50:49]
+TAGS: PAT, PAC, PD
+ENTRY: This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test.
+
+
+USER: aquiatch
+DATE: [Tue May 29 2012 18:03:25]
+TAGS: PAT, PAC, PD
+ENTRY: Testing in this area
+
+USER: aquiatch
+DATE: [Tue May 29 2012 18:03:35]
+TAGS: PAT, PAC, PD
+ENTRY: Yet another test here.
+
+
+USER: aquiatch
+DATE: [Wed Jun 06 2012 13:08:57]
+TAGS: Luke
+ENTRY: Checking to see if username is picked up.
+
+USER: hdhami
+DATE: [Wed Jun 06 2012 13:11:01]
+TAGS: MACTX, RCS2, STICK
+ENTRY: Testing add status hdhami
+
+
+USER: wstjohn
+DATE: [Thu Jun 07 2012 11:10:46]
+TAGS: Luke
+ENTRY: testing1
+
+USER: wstjohn
+DATE: [Thu Jun 07 2012 11:10:59]
+TAGS: PAT, PAC, Design
+ENTRY: testing1
+
+USER: wstjohn
+DATE: [Thu Jun 07 2012 11:13:20]
+TAGS: DV
+ENTRY: testing2
+
+
+USER: aquiatch
+DATE: [Fri Jun 08 2012 11:01:28]
+TAGS: Luke
+ENTRY: Checking to see if username is picked up.     \*Updated\*
+
+USER: aquiatch
+DATE: [Fri Jun 08 2012 13:59:08]
+TAGS: Luke,  Antares-C,  DFL,  TOP,  ETC,  FBE,  DV,  PD
+ENTRY: The cgi execution is allowed through an ajax post call \*Updated\*
+
+
+USER: aquiatch
+DATE: [Thu Jun 14 2012 10:34:55]
+TAGS: PAT,  PAC,  PD,  IO \*Updated\*
+ENTRY: Yet another test here.
+
+USER: aquiatch
+DATE: [Thu Jun 14 2012 10:36:41]
+TAGS: PAT,   PAC,   PD,   IO
+ENTRY: Yet another test here right right! \*Updated\*
+
+USER: aquiatch
+DATE: [Thu Jun 14 2012 11:22:03]
+TAGS: Luke, MACTX
+ENTRY: TESTING area for status entry
+
+
+USER: aquiatch
+DATE: [Mon Jun 18 2012 13:31:33]
+TAGS: Luke
+ENTRY: Checking to see if username is picked up. In fact, username is picked up. \*Updated\*
+
+
+USER: aquiatch
+DATE: [Thu Jun 21 2012 10:25:16]
+TAGS: PAT,  PAC,  PD
+ENTRY: This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test.
+
+USER: aquiatch
+DATE: [Thu Jun 21 2012 10:25:43]
+TAGS: Luke,  MACTX,  TOP \*Updated\*
+ENTRY: TESTING area for status entry... \*Updated\*
+
+USER: aquiatch
+DATE: [Thu Jun 21 2012 10:26:32]
+TAGS: Luke,  PAT,   PAC,   PD \*Updated\*
+ENTRY: This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test.
+
+USER: aquiatch
+DATE: [Thu Jun 21 2012 10:27:03]
+TAGS: Luke,   MACTX,   TOP
+ENTRY: TESTING area for status entry... 
+
+
+USER: aquiatch
+DATE: [Mon Jun 25 2012 11:25:55]
+TAGS: Yoda
+ENTRY: Testing add status page on Chrome.
+
+
+USER: aquiatch
+DATE: [Mon Jun 25 2012 12:12:41]
+TAGS: CBS, Design
+ENTRY: Testing add status page on Firefox.
+
+
+USER: aquiatch
+DATE: [Thu June 28 2012 12:17:19]
+TAGS: Yoda
+ENTRY: Testing local date in Chrome.
+
+USER: aquiatch
+DATE: [Thu June 28 2012 12:18:16]
+TAGS: Antares-C
+ENTRY: Testing local time in IE.
+
+
+USER: aquiatch
+DATE: [Fri July 6 2012 14:27:51]
+TAGS: 
+ENTRY: Issues with IE Document Mode: Quirks vs. IE7 Standards vs IE9 Standards...
+
+USER: aquiatch
+DATE: [Fri July 6 2012 14:28:53]
+TAGS: Design, DV, DFT, IMPL, PD
+ENTRY: Status Tool on Firefox seems to be working properly.
+
+USER: aquiatch
+DATE: [Fri July 6 2012 14:31:7]
+TAGS: DFT
+ENTRY: Issues with IE Document Mode: Quirks Mode vs. IE7 Standards vs. IE9 Standards.Add Status page works fine using IE9 Standards Mode.
+
+USER: aquiatch
+DATE: [Fri July 6 2012 14:32:2]
+TAGS: Design, DV, DFT, IMPL, PD
+ENTRY: No real solutions found regarding IE Document Modes.
+
+USER: aquiatch
+DATE: [Fri July 6 2012 14:47:50]
+TAGS: DFL, QPB, GPM, PIF, MPE, PAC, L2, PA, SCH, TCAM, SHU, LLQ, IO, TOP
+ENTRY: Chrome seems to give me the least amount if problems when dealing with web development.
+
+USER: aquiatch
+DATE: [Fri July 6 2012 16:19:0]
+TAGS: DFL
+ENTRY: Happy July 4th!
+
+USER: aquiatch
+DATE: [Fri July 6 2012 16:19:50]
+TAGS: Yoda, Pita, DFL, QPB, GPM
+ENTRY: It\'s July 6th.
+
+USER: aquiatch
+DATE: [Fri July 6 2012 16:28:46]
+TAGS: DFL,  QPB,  GPM,  PIF,  MPE \*Updated\*
+ENTRY: Chrome seems to give me the least amount of problems when creating websites. \*Updated\*
+
+USER: aquiatch
+DATE: [Fri July 6 2012 16:29:44]
+TAGS: Yoda,  Pita,  DFL,  QPB,  GPM
+ENTRY: It\\\'s July 6th and it\'s Friday. \*Updated\*
+
+USER: aquiatch
+DATE: [Fri July 6 2012 16:32:37]
+TAGS: Yoda, Pita, Luke, PAT, Antares-E, Antares-C, Design, DV, DFT, IMPL, PD
+ENTRY: Testing Status Tool in Safari.
+
+USER: aquiatch
+DATE: [Fri July 6 2012 16:34:12]
+TAGS: Design,  DV,  DFT,  IMPL,  PD
+ENTRY: No real solutions found regarding IE Document Modes. Research is still in progress. \*Updated\*
+
+USER: aquiatch
+DATE: [Fri July 6 2012 16:38:28]
+TAGS: Yoda,  Pita,  Luke,  PAT \*Updated\*
+ENTRY: Testing Status Tool in Safari. Seems to be working \*Updated\*
+
+USER: aquiatch
+DATE: [Fri July 6 2012 16:44:16]
+TAGS: Pita
+ENTRY: Safari Safari Safari
+
+USER: aquiatch
+DATE: [Fri July 6 2012 16:44:16]
+TAGS: Yoda
+ENTRY: Firefox Firefox Firefox
+
+USER: aquiatch
+DATE: [Fri July 6 2012 16:44:52]
+TAGS: Yoda
+ENTRY: Firefox Firefox Firefox
+
+USER: aquiatch
+DATE: [Fri July 6 2012 16:44:52]
+TAGS: Pita
+ENTRY: Safari Safari Safari
+
+USER: aquiatch
+DATE: [Fri July 6 2012 16:45:59]
+TAGS: Yoda
+ENTRY: Firefox Firefox Firefox
+
+USER: aquiatch
+DATE: [Fri July 6 2012 16:45:59]
+TAGS: Pita
+ENTRY: Safari Safari Safari
+
+USER: aquiatch
+DATE: [Fri July 6 2012 16:47:5]
+TAGS: Yoda
+ENTRY: Firefox Firefox Firefox
+
+USER: aquiatch
+DATE: [Fri July 6 2012 16:47:5]
+TAGS: Pita
+ENTRY: Safari Safari Safari
+
+USER: aquiatch
+DATE: [Fri July 6 2012 16:48:28]
+TAGS: Pita
+ENTRY: Safari Safari Safari
+
+USER: aquiatch
+DATE: [Fri July 6 2012 16:48:28]
+TAGS: Yoda
+ENTRY: Firefox Firefox Firefox
+
+USER: aquiatch
+DATE: [Fri July 6 2012 16:48:37]
+TAGS: Yoda
+ENTRY: Firefox Firefox Firefox
+
+USER: aquiatch
+DATE: [Fri July 6 2012 16:48:37]
+TAGS: Pita
+ENTRY: Safari Safari Safari
+
+USER: aquiatch
+DATE: [Fri July 6 2012 16:50:31]
+TAGS: Pita
+ENTRY: Safari Safari Safari. Now it\'s really Safari. \*Updated\*
+
+USER: aquiatch
+DATE: [Fri July 6 2012 16:51:18]
+TAGS: Antares-E, Antares-C
+ENTRY: Testing Status Tool on Safari. Hopefully all goes well and there wouldn\'t be any bugs.
+
+USER: aquiatch
+DATE: [Fri July 6 2012 16:53:48]
+TAGS: PAT \*Updated\*
+ENTRY: Testing Status Tool in Safari. Seems to be working. Confirmed: Safari is good to go. \*Updated\*
+
+USER: wstjohn
+DATE: [Wed July 11 2012 13:47:33]
+TAGS: DV
+ENTRY: testing2, more info \*Updated\*
+
+USER: wstjohn
+DATE: [Wed July 11 2012 13:49:7]
+TAGS: PAT,  PAC,  Design
+ENTRY: testing1
+
+USER: wstjohn
+DATE: [Wed July 11 2012 13:51:13]
+TAGS: PAT, SCH, Design
+ENTRY: Wednesday testing1
+
+USER: aquiatch
+DATE: [Wed July 11 2012 16:22:57]
+TAGS: Yoda,  PAT \*Updated\*
+ENTRY: Firefox Firefox Firefox
+
+USER: aquiatch
+DATE: [Wed July 11 2012 16:25:53]
+TAGS: Yoda,   PAT
+ENTRY: Firefox Firefox Firefox
+
+USER: aquiatch
+DATE: [Wed July 11 2012 17:10:24]
+TAGS: Yoda,    PAT
+ENTRY: Firefox Firefox Firefox
+
+USER: aquiatch
+DATE: [Wed July 11 2012 17:10:57]
+TAGS: PAT
+ENTRY: Testing Status Tool in Safari. Seems to be working. Confirmed: Safari is good to go. 
+
+USER: aquiatch
+DATE: [Wed July 11 2012 17:12:3]
+TAGS: PAT
+ENTRY: Testing Status Tool in Safari. Seems to be working. Confirmed: Safari is good to go. 
+
+USER: aquiatch
+DATE: [Wed July 11 2012 17:12:16]
+TAGS: PAT,  Yoda \*Updated\*
+ENTRY: Testing Status Tool in Safari. Seems to be working. Confirmed: Safari is good to go. 
+
+USER: aquiatch
+DATE: [Wed July 11 2012 17:12:44]
+TAGS: PAT \*Updated\*
+ENTRY: Testing Status Tool in Safari. Seems to be working. Confirmed: Safari is good to go. 
+
+USER: aquiatch
+DATE: [Wed July 11 2012 17:14:21]
+TAGS: PAT,  Yoda \*Updated\*
+ENTRY: Testing Status Tool in Safari. Seems to be working. Confirmed: Safari is good to go. 
+
+USER: aquiatch
+DATE: [Wed July 11 2012 17:14:56]
+TAGS: PAT \*Updated\*
+ENTRY: Testing Status Tool in Safari. Seems to be working. Confirmed: Safari is good to go. 
+
+USER: aquiatch
+DATE: [Wed July 11 2012 17:15:56]
+TAGS: PAT,  Yoda \*Updated\*
+ENTRY: Testing Status Tool in Safari. Seems to be working. Confirmed: Safari is good to go. 
+
+USER: aquiatch
+DATE: [Wed July 11 2012 17:19:49]
+TAGS: PAT \*Updated\*
+ENTRY: Testing Status Tool in Safari. Seems to be working. Confirmed: Safari is good to go. 
+
+USER: aquiatch
+DATE: [Wed July 11 2012 17:20:29]
+TAGS: PAT,   Yoda,  PAT \*Updated\*
+ENTRY: Testing Status Tool in Safari. Seems to be working. Confirmed: Safari is good to go. 
+
+USER: aquiatch
+DATE: [Wed July 11 2012 17:20:48]
+TAGS: PAT,    Yoda \*Updated\*
+ENTRY: Testing Status Tool in Safari. Seems to be working. Confirmed: Safari is good to go. 
+
+USER: aquiatch
+DATE: [Wed July 11 2012 17:30:17]
+TAGS: PAT,  Yoda  \*Updated\*
+ENTRY: Testing Status Tool in Safari. Seems to be working. Confirmed: Safari is good to go. 
+
+USER: aquiatch
+DATE: [Wed July 11 2012 17:31:10]
+TAGS: PAT \*Updated\*
+ENTRY: Testing Status Tool in Safari. Seems to be working. Confirmed: Safari is good to go. 
+
+USER: aquiatch
+DATE: [Wed July 11 2012 17:31:24]
+TAGS: PAT,  Yoda  \*Updated\*
+ENTRY: Testing Status Tool in Safari. Seems to be working. Confirmed: Safari is good to go. 
+
+USER: aquiatch
+DATE: [Wed July 11 2012 17:31:38]
+TAGS: PAT,   Sample \*Updated\*
+ENTRY: Testing Status Tool in Safari. Seems to be working. Confirmed: Safari is good to go. 
+
+USER: aquiatch
+DATE: [Wed July 11 2012 17:44:21]
+TAGS: PAT \*Updated\*
+ENTRY: Testing Status Tool in Safari. Seems to be working. Confirmed: Safari is good to go. 
+
+USER: aquiatch
+DATE: [Wed July 11 2012 17:45:2]
+TAGS: Luke \*Updated\*
+ENTRY: Testing Status Tool in Safari. Seems to be working. Confirmed: Safari is good to go. 
+
+USER: aquiatch
+DATE: [Wed July 11 2012 17:47:22]
+TAGS: Luke \*Updated\*
+ENTRY: Testing Status Tool in Safari. Seems to be working. Confirmed: Safari is good to go. 
+
+USER: aquiatch
+DATE: [Wed July 11 2012 17:47:34]
+TAGS: PAT \*Updated\*
+ENTRY: Testing Status Tool in Safari. Seems to be working. Confirmed: Safari is good to go. 
+
+USER: aquiatch
+DATE: [Wed July 11 2012 17:49:18]
+TAGS: PAT
+ENTRY: Testing Status Tool in Safari. Seems to be working. Confirmed: Safari is good to go. 
+
+USER: aquiatch
+DATE: [Wed July 11 2012 17:49:26]
+TAGS: PAT,  Yoda \*Updated\*
+ENTRY: Testing Status Tool in Safari. Seems to be working. Confirmed: Safari is good to go. 
+
+USER: aquiatch
+DATE: [Wed July 11 2012 17:50:59]
+TAGS: PAT \*Updated\*
+ENTRY: Testing Status Tool in Safari. Seems to be working. Confirmed: Safari is good to go. 
+
+USER: aquiatch
+DATE: [Wed July 11 2012 17:53:11]
+TAGS: PAT,  Luke,              Antares-E \*Updated\*
+ENTRY: Testing Status Tool in Safari. Seems to be working. Confirmed: Safari is good to go. 
+
+USER: aquiatch
+DATE: [Wed July 11 2012 17:59:18]
+TAGS: PAT, Luke,  Design,  PLR \*Updated\*
+ENTRY: Testing Status Tool in Safari. Seems to be working. Confirmed: Safari is good to go. 
+
+USER: aquiatch
+DATE: [Thu July 12 2012 9:33:3]
+TAGS: Yoda, Pita, DFL, QPB, GPM
+ENTRY: Testing once more, Thursday
+
+USER: aquiatch
+DATE: [Thu July 12 2012 10:22:14]
+TAGS: Antares-E, Antares-C, TOP
+ENTRY: Testing again and again
+
+USER: aquiatch
+DATE: [Thu July 12 2012 10:23:20]
+TAGS: Antares-E,  Antares-C,  TOP,  Design \*Updated\*
+ENTRY: Testing again and again
+
+USER: aquiatch
+DATE: [Thu July 12 2012 10:28:39]
+TAGS: DFL, QPB, ARL
+ENTRY: Hello thereUSER: aquiatch
+DATE: [Fri July 13 2012 14:35:45]
+TAGS: Design
+ENTRY: USER: aquiatch
+DATE: [Fri July 13 2012 14:36:0]
+TAGS: Yoda, Pita
+ENTRY: 

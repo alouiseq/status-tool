@@ -1,0 +1,479 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+
+<!--This HTML code displays the generating status report design of the Status Tool-->
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=9">
+
+<title>Status Report</title>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" media="all" href="/auto/dtracker/jquery_UI_datepicker/themes/redmond/jquery-ui-1.8.18.custom.css" />
+<link rel="stylesheet" type="text/css" media="all" href="/auto/dtracker/jquery_UI_datepicker/themes/redmond/jquery-ui-1.8.18.aquiatch.css" />
+<script type="text/javascript" src="/auto/dtracker/jquery_UI_datepicker/themes/redmond/jquery-ui-1.8.18.custom.min.js"></script>
+
+
+<style type="text/css">
+/* sets the color of links */
+a:link {color:#FF0000;}
+a:visited {color:#FF0000;}
+a#this {color:blue}
+
+.headers {text-align:center;}  /* headers on each page should be centered */
+#viewstatus {font-size:large;}  /* size of current page's title */
+
+/* create some space around the headers */
+h2 {margin:0px;padding:0px;}   
+h4 {margin:10px;padding:0px;}   
+
+textarea {}
+.attributes {
+   border:2px solid black;
+   width:73%;
+}
+
+.listA,.listB,.listC,.listD {
+   margin-left:20px;
+   margin-bottom:20px;
+}
+
+/* set color and font for OR and AND relationships of attributes */
+.OR { 
+   margin-left:82%;
+   font-size:large;
+   color:red;
+}
+.AND {
+   margin-left:72%;
+   font-size:large;
+   color:blue;
+}
+</style>
+
+<script type="text/javascript">
+// This function creates a cookie to store user attributes 
+function setCookie(c_name,value,exdays) {
+   var exdate=new Date();
+   exdate.setDate(exdate.getDate() + exdays);
+   var c_value=escape(value) + ((exdays==null) ? "" : ";expires="+exdate.toUTCString());
+   document.cookie=c_name + "=" + c_value;
+}
+
+// This function reads in user's attributes from the cookie
+function getCookie(c_name) {
+   var i,x,y,ARRcookies=document.cookie.split(";");
+   for (i=0;i<ARRcookies.length;i++) {
+      x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
+      y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
+      x=x.replace(/^\s+|\s+$/g,"");
+      if (x==c_name) {
+         return unescape(y);
+      }
+   }
+}
+
+// This function checks if user has saved attributes in cookie and retains previous user web page state 
+function checkAttr_Cookie(c_name, listType) {
+   var attrValues = getCookie(c_name);
+   if (attrValues!=null && attrValues!="") {
+      var valuesAry = attrValues.split(",");   // create array of attributes from cookie
+      var elemAry = document.getElementsByName(listType); // array of all attributes available on web page
+      
+      // traverse attributes in array and compare with cookie values to retain user's previously checked attributes
+      for (var x in valuesAry) {
+         for (var i=0; i<elemAry.length; i++) {
+            if (valuesAry[x] == elemAry[i].id) {
+	       elemAry[i].checked = true;
+    	       break;
+  	    }
+  	 }
+      }
+   }
+}
+
+// traverse all elements of Chips, Superblocks, Blocks, and Functions array from text file and 
+// add into corresponding attribute section of web page
+function insertAttribute(ary, listType, attrType) {
+   var count = 0;
+   var flag = 0;
+   for (var iterator in ary) {    // ary is attribute array from text file
+      var linebr = document.createElement('br');    // line break to fit only checkboxes per line
+      var data = document.createElement('input');   // create checkbox 
+      data.type = "checkbox";
+      data.name = listType;         // listType is A|B|C|D
+      data.className = listType;  
+      data.id = ary[iterator];
+      var label_chip = document.createElement('label');  // create name associated with checkbox
+      label_chip.htmlFor = data.id;
+      label_chip.innerHTML = ary[iterator]; 
+      var attr = document.getElementById(attrType);
+
+      // insert checkbox and associated name into attribute section of page
+      var divvy = document.createElement('div');
+      divvy.style.display="inline-block";
+      divvy.appendChild(data); 
+      divvy.appendChild(label_chip);
+      attr.appendChild(divvy);     
+      count++;
+   }
+} // end function insertAttribute
+
+// Function to Select All elements in Attribute List
+function selectAll (attr_type) {
+   if (attr_type == "chips") var elems = document.getElementsByName('listA');
+   if (attr_type == "superblocks") var elems = document.getElementsByName('listB');
+   if (attr_type == "blocks") var elems = document.getElementsByName('listC');
+   if (attr_type == "functions") var elems = document.getElementsByName('listD');
+      
+   for (var i=0; i<elems.length; i++) 
+         elems[i].checked = true; 
+}
+
+// Function to Clear All elements in Attribute List
+function clearAll (attr_type) {
+   if (attr_type == "chips") var elems = document.getElementsByName('listA');
+   if (attr_type == "superblocks") var elems = document.getElementsByName('listB');
+   if (attr_type == "blocks") var elems = document.getElementsByName('listC');
+   if (attr_type == "functions") var elems = document.getElementsByName('listD');
+      
+   for (var i=0; i<elems.length; i++) 
+         elems[i].checked = false; 
+}
+
+// go through the attributes lists and save them as cookies 
+function myAttributes () {
+   var chips = document.getElementsByName('listA');
+   var superblocks = document.getElementsByName('listB');
+   var blocks = document.getElementsByName('listC');
+   var functions = document.getElementsByName('listD');
+   var buffer = "";     // holds all the attribute elements that user selected
+   var attrType = "";
+   var attrName = ""; 
+
+   // save a cookie for each attribute list
+   for(var x=0; x<4; x++) {
+      if (x == 0) {attrType = chips; attrName = "chips";}
+      else if (x == 1) {attrType = superblocks; attrName = "superblocks";}
+      else if (x == 2) {attrType = blocks; attrName = "blocks";}
+      else if (x == 3) {attrType = functions; attrName = "functions";}
+
+      for (var i=0; i<attrType.length; i++) {
+         if (attrType[i].checked)
+            buffer += attrType[i].id + ",";   // comma separated elements in buffer
+      }
+      buffer = buffer.replace(/,$/, "");   // get rid of the last comma at the end of buffer string
+      setCookie(attrName, buffer, 365);
+      buffer = "";
+   }
+}
+
+// This function reveals or hides the details of selected types of report generation 
+function select_reportType (type) {
+   if (type == "dateAll") {   
+      $("span#date_select").hide();
+   }
+   else if (type == "dateRange") {
+      $("span#date_select").show();
+   }
+/*   else if (type == "hierarchical") {
+      $("span#date_select").hide();
+      $("div#hierarchical_select").show();
+   }
+*/
+   // Check which elements are selected and place a border around them
+   var roots = document.getElementsByName('criterion'); 
+   for(i=0; i<roots.length; i++) {
+      if (roots[i].checked) {
+	 roots[i].disabled = true;   // disable radio button if selected
+	 if (roots[i].value == "dateAll")
+	    document.getElementById('all_d').style.border="thin solid #0000FF";
+	 else if (roots[i].value == "dateRange")
+	    document.getElementById('date_r').style.border="thin solid #0000FF";
+      }
+      else { // close border on element if radio button not selected
+	 roots[i].disabled = false;   // enable radio button if selected
+	 if (roots[i].value == "dateAll")
+	    document.getElementById('all_d').style.border="";
+	 else if (roots[i].value == "dateRange")
+	    document.getElementById('date_r').style.border="";
+      }
+   }
+   var subroots = document.getElementsByName('criterion2'); 
+   for(i=0; i<subroots.length; i++) {
+      if (subroots[i].checked) {
+	 if (subroots[i].value == "usersAll")
+	    document.getElementById('all_u').style.border="thin solid #0000FF";
+	 else if (subroots[i].value == "Me")
+	    document.getElementById('me').style.border="thin solid #0000FF";
+	 else // subroots[i].value == "hierarchical"
+	    document.getElementById('hier').style.border="thin solid #0000FF";
+      }
+      if (!subroots[i].checked) { // close border on element if radio button not selected
+	 if (subroots[i].value == "usersAll")
+	    document.getElementById('all_u').style.border="";
+	 else if (subroots[i].value == "Me")
+	    document.getElementById('me').style.border="";
+	 else (subroots[i].value == "hierarchical")
+	    document.getElementById('hier').style.border="";
+      }
+   }
+}   // end select_reportType function
+
+// these variables are declared outside the function to act as global variables
+var first_date = "";
+var second_date = "";
+var counter = 0;      // just to check if user has selected a date for both datepickers
+
+// Extracts date from datepicker's text area and assigns to global variables 
+function handle_date (e) {
+   var handle_date_targ;
+   if (!e) var e = window.event;
+   if (e.target) handle_date_targ = e.target;
+   else if (e.srcElement) handle_date_targ = e.srcElement;
+   if (handle_date_targ.nodeType == 3)  // defeat Safari bug
+      handle_date_targ = handle_date_targ.parentNode;
+
+   $("#"+handle_date_targ.id).datepicker("option", "dateFormat", 'mm/dd/yy');  // ensures proper date format
+   var date = eval(handle_date_targ.id).value;
+
+   // order is 1 for the first date and 2 for the second date
+   if (handle_date_targ.id == "date1") var order = 1;
+   else var order = 2;
+
+   // obtain today's date 
+   var d = new Date();  // today's date
+   var month = d.getMonth() + 1;            // add 1 since javascript month begins with with 0 (0-11)
+   if (month < 10) month = "0" + month;    // concatenate leading 0 to month
+   var day = d.getDate();
+   if (day < 10) day = "0" + day;    // concatenate leading 0 to day 
+   var year = d.getFullYear();    
+   var today = month + "/" + day + "/" + year;
+   var today_ary = today.split("/");
+
+   // disable second datepicker if first datepicker is today's date
+   if ((order == 1) && (date == today))
+      $("#date2").datepicker("disable");
+   else   // user selected date is not today's date
+      $("#date2").datepicker("enable");
+
+   // assigns FROM and TO date range to global variables
+   if (order == 1) {
+      counter++;
+      first_date = date; 
+   }
+   else {  // order is 2
+      counter++;
+      second_date = date;
+      //alert (first_date + " : " + second_date);
+   }
+   if (counter >= 2) {
+      // obtain month, day, and year and place into array
+      var date1_ary = first_date.split("/");
+      var date2_ary = second_date.split("/");
+     
+      // check if second date is older than first date, if so, set second date to first date 
+      for (x in date2_ary) {
+         if (date2_ary[x] < date1_ary[x])
+	    $("#date2").datepicker("setDate", first_date);
+      }
+      // check if either the first or second date is later than today's date, if so, set it to today's date 
+      for (x in date1_ary) {
+         if (date1_ary[x] > today_ary[x])
+	    $("#date1").datepicker("setDate", today);
+      }
+      for (x in date2_ary) {
+         if (date2_ary[x] > today_ary[x])
+	    $("#date2").datepicker("setDate", today);
+      }
+   }
+}
+
+// Handles data range selection when the Date Range radio button is selected
+function handle_dateRange () {
+   // the code below creates the first datepicker to allow user to select a date range of the desired status report
+   var from = document.createTextNode('FROM: ');
+   document.getElementById('date_select').appendChild(from);
+   var sel_date1 = "date1";
+   window[sel_date1] = document.createElement('input');
+   window[sel_date1].type = "text";
+   window[sel_date1].size = 10;
+   document.getElementById('date_select').appendChild(window[sel_date1]);
+   window[sel_date1].id = sel_date1;
+   $("#"+sel_date1).datepicker();	// create a datepicker for FROM date 
+   var first_date = window[sel_date1].onchange=handle_date;    // call function when the first date is selected
+
+   // the code below is for the second datepicker
+   var to = document.createTextNode('  TO: ');
+   document.getElementById('date_select').appendChild(to);
+   var sel_date2 = "date2";
+   window[sel_date2] = document.createElement('input');
+   window[sel_date2].type = "text";
+   window[sel_date2].size = 10;
+   document.getElementById('date_select').appendChild(window[sel_date2]);
+   window[sel_date2].id = sel_date2;
+   $("#"+sel_date2).datepicker();	// create a datepicker for TO date 
+   var second_date = window[sel_date2].onchange=handle_date;      // call function when the second date is selected
+}
+
+// Handles report based on hierchical selection when the Hierchical radio button is selected
+function handle_hierchical() {
+   // not yet started
+}
+
+// This function generates a status report based on the Attribute criteria and report type selected
+function genReport () {
+   // save user attributes as a cookie if changed
+   myAttributes();
+  
+   // grab attributes from cookie
+   var chips = getCookie("chips");
+   var superblocks = getCookie("superblocks");
+   var blocks = getCookie("blocks");
+   var functions = getCookie("functions");
+
+   // combine all saved attribute entries separated by a comma unless no attribute selected from attribute section
+   // Note: double colons '::' represent a division between entries, date, and attributes and double slashes '//' represent a division between attribute sets
+   var attributes = "";
+   if (chips) attributes += chips + "//";
+   if (superblocks) attributes += superblocks + "//";
+   if (blocks) attributes += blocks + "//";
+   if (functions) attributes += functions;
+   attributes = attributes.replace(/\/\/$/, "");   // get rid of the last two slashes at the end of attributes string
+ 
+   // check if user desires a report containing all logged entries or restricted to a specific date range
+   var choice = document.getElementsByName("criterion");
+   var index;    // contains the index of the selected radio button
+   for (i=0; i<choice.length; i++) {
+      if (choice[i].checked == true) { 
+         index = i;
+         break;
+      }
+   }
+
+   // check if user desires to view a report of all users' entries or just the user itself
+   var choice2 = document.getElementsByName("criterion2");
+   var index2;    // contains the index of the selected radio button
+   for (i=0; i<choice2.length; i++) {
+      if (choice2[i].checked == true) { 
+         index2 = i;
+         break;
+      }
+   }
+   
+   // datastr will contain the attributes and date range selected to be passed as an argument to a report generation script
+   // format of datastr:   first_date : second_date : users : attributes
+   if (choice[index].value == "dateAll") datastr = "::::all_users::" + attributes;   // double colons signify that no date range has been specified
+   else if (choice[index].value == "dateRange") datastr = first_date + "::" + second_date + "::all_users::" + attributes;
+  
+   if (choice2[index2].value == "Me") datastr = datastr.replace("all_users", "me");  // if user selects to only view its own report entries 
+
+   //alert(datastr);
+   
+   // call script to generate report
+   $.ajax ({
+      url: "gen_Report.cgi",
+      async: false,
+      data: datastr,
+      success: function(result) {
+	  //alert(result);
+	 window.open("http://stattool/generate_report.html");
+      },
+      error: function(xhr) {
+	 alert("Error reported back to dtracker.html");
+      }
+   });
+} // end genReport function
+
+// This function handles which user or users status report should be generated
+function userView() {
+
+}
+</script>
+</head>
+
+<body onload="select_reportType('dateAll')">
+<!--<body onload='checkGenRpt_Cookie()'>-->
+
+<!-- open and read text file -->
+<script type="text/javascript" src="attributes.txt"></script>
+
+<div class="headers">
+<h2><b>SiE Status Tool</b></h2>
+<h4><a href="http://stattool/stattracker.html"><b>HOME</b></a>
+| <a href="http://stattool/addstatus.html">ADD STATUS</a>
+| <a id="this" href="http://stattool/statusreport.html">VIEW STATUS REPORT</a>
+| <a href="http://stattool/searchstatus.html">SEARCH STATUS</a></h4>
+<b id="viewstatus">STATUS REPORT</b>
+</div>
+
+<b>Generate report based on:</b><br>
+<span id="all_d"><input type="radio" value="dateAll" name="criterion" checked onClick="select_reportType('dateAll')"/> Date All</span> &nbsp;&nbsp;
+<span id="date_r"><input type="radio" value="dateRange" name="criterion" onClick="select_reportType('dateRange')"/> Date Range</span> &nbsp;&nbsp; 
+<span id="date_select"> | &nbsp;&nbsp;&nbsp;</span>
+<input type="button" id="genReport" style="margin-left:90px" value="Generate Report" onClick="genReport()" />
+<input type="button" id="saveReport" style="margin-left:40px" value="Save Report" title="This only works in IE" onclick="document.execCommand('SaveAs',true,'Status_Report.html');" />
+<br/>&nbsp;&nbsp;<span id="all_u"><input type="radio" value="usersAll" name="criterion2" checked onClick="select_reportType('usersAll')" />Users All</span> &nbsp;&nbsp;
+<span id="me"><input type="radio" value="Me" name="criterion2" onClick="select_reportType('Me')" /> Me </span>&nbsp;&nbsp;
+<span id="hier"><input type="radio" value="hierarchical" name="criterion2" disabled onClick="select_reportType('hierarchical')" />Hierarchical</span> &nbsp;&nbsp;
+
+<div id="dateAll_select"></div>
+<div id="hierchical_select"></div>
+
+<script type="text/javascript">
+//Function calls below implements various report types 
+handle_dateRange();
+// handle_hierchical();
+</script>
+
+<!--List Attributes on web page-->
+<br/><div><b>ATTRIBUTES:</b><br/></div>
+<b><i>CHIP(s)</i></b>&nbsp;
+<div class="attributes" id="chips">
+<input type="button" name="sel" class="sel" value="Select All" onClick="selectAll('chips')" />&nbsp;&nbsp;
+<input type="button" name="nosel" class="nosel" value="Clear All" onClick="clearAll('chips')" />
+<span class="OR" title="Attributes within this area have an 'OR' relationship">OR</span><br/><br/></div>
+<span class="AND" title="Attributes across the boxed areas have an 'AND' relationship">AND</span><br/>
+<b><i>SUPERBLOCK(s)</i></b>
+<div class="attributes" id="superblocks">
+<input type="button" name="sel" class="sel" value="Select All" onClick="selectAll('superblocks')" />&nbsp;&nbsp;
+<input type="button" name="nosel" class="nosel" value="Clear All" onClick="clearAll('superblocks')" />
+<span class="OR" title="Attributes within this area have an 'OR' relationship">OR</span><br/><br/></div>
+<span class="AND" title="Attributes across the boxed areas have an 'AND' relationship">AND</span><br/>
+<b><i>BLOCK(s)</i></b>
+<div class="attributes" id="blocks">
+<input type="button" name="sel" class="sel" value="Select All" onClick="selectAll('blocks')" />&nbsp;&nbsp;
+<input type="button" name="nosel" class="nosel" value="Clear All" onClick="clearAll('blocks')" />
+<span class="OR" title="Attributes within this area have an 'OR' relationship">OR</span><br/><br/></div>
+<span class="AND" title="Attributes across the boxed areas have an 'AND' relationship">AND</span><br/>
+<b><i>FUNCTION(s)</i></b>
+<div class="attributes" id="functions">
+<input type="button" name="sel" class="sel" value="Select All" onClick="selectAll('functions')" />&nbsp;&nbsp;
+<input type="button" name="nosel" class="nosel" value="Clear All" onClick="clearAll('functions')" />
+<span class="OR" title="Attributes within this area have an 'OR' relationship">OR</span><br/><br/>
+</div><br/>
+
+<script type="text/javascript">
+// call function to insert attribute lists to the web page
+insertAttribute (Chips, "listA", "chips"); 
+insertAttribute (Superblocks, "listB", "superblocks"); 
+insertAttribute (Blocks, "listC", "blocks"); 
+insertAttribute (Functions, "listD", "functions"); 
+
+// check cookies for previously checked attributes
+checkAttr_Cookie("chips", "listA");
+checkAttr_Cookie("superblocks", "listB");
+checkAttr_Cookie("blocks", "listC");
+checkAttr_Cookie("functions", "listD");
+</script>
+
+<hr style="width:100%"></hr>
+
+<div class="headers">
+<a href="http://stattool/stattracker.html">HOME</a>
+| <a href="http://stattool/addstatus.html">ADD STATUS</a>
+| <a id="this" href="http://stattool/statusreport.html">VIEW STATUS REPORT</a>
+| <a href="http://stattool/searchstatus.html">SEARCH STATUS</a>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,41 @@
+<html>
+<head>
+<title>Generate Report</title>
+<h2>Generate Status Report</h2>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+
+<script type="text/javascript">
+// Calls script to extract server authenticated user
+var username = "";     // contains the user accessing the status tracker website
+$.ajax ({
+   url: "extract_user.cgi",
+   async: false,
+   success: function(result) {
+       username = result;
+   },
+   error: function(xhr) {
+      alert("Error reported back to dtracker.html");
+   }
+});
+
+// textfile of status report
+var myfile = "statusReport_" + username + ".txt";
+
+// Use XMLHttpRequest to read status report from a text file to a string
+xmlhttp = new XMLHttpRequest();
+xmlhttp.open("GET", myfile,true);
+//xmlhttp.open("GET", "statusReport.txt",true);
+xmlhttp.send();
+
+xmlhttp.onreadystatechange=function() {   // proceed only after server processes request to read text file
+   if (xmlhttp.readyState==4 && xmlhttp.status==200)
+      document.getElementById("myReport").innerHTML=xmlhttp.responseText;   // read entries from text file to web page
+}
+</script>
+</head>
+
+<body>
+<div id="myReport"><br/></div>
+</body>
+</html>

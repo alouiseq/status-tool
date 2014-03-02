@@ -1,0 +1,51 @@
+<b>TAGS:</b>  <span style='color:red;'>*All Dates*,</span><span style='color:green;'> all_users, </span><span style='color:blue;'>Design </span>
+<br/><br/>USER: aquiatch
+<br/>DATE: [Thu July 12 2012 10:28:39]
+<br/>TAGS: DFL, QPB, ARL
+<br/>ENTRY: Hello thereUSER: aquiatch
+<br/>DATE: [Fri July 13 2012 14:35:45]
+<br/>TAGS: Design
+<br/>ENTRY: USER: aquiatch
+<br/>DATE: [Fri July 13 2012 14:36:0]
+<br/>TAGS: Yoda, Pita
+<br/>ENTRY: <br/><br/>USER: aquiatch
+<br/>DATE: [Thu July 12 2012 10:23:20]
+<br/>TAGS: Antares-E,  Antares-C,  TOP,  Design \*Updated\*
+<br/>ENTRY: Testing again and again
+<br/><br/>USER: aquiatch
+<br/>DATE: [Wed July 11 2012 17:59:18]
+<br/>TAGS: PAT, Luke,  Design,  PLR \*Updated\*
+<br/>ENTRY: Testing Status Tool in Safari. Seems to be working. Confirmed: Safari is good to go. 
+<br/><br/>USER: wstjohn
+<br/>DATE: [Wed July 11 2012 13:51:13]
+<br/>TAGS: PAT, SCH, Design
+<br/>ENTRY: Wednesday testing1
+<br/><br/>USER: wstjohn
+<br/>DATE: [Wed July 11 2012 13:49:7]
+<br/>TAGS: PAT,  PAC,  Design
+<br/>ENTRY: testing1
+<br/><br/>USER: aquiatch
+<br/>DATE: [Fri July 6 2012 16:34:12]
+<br/>TAGS: Design,  DV,  DFT,  IMPL,  PD
+<br/>ENTRY: No real solutions found regarding IE Document Modes. Research is still in progress. \*Updated\*
+<br/><br/>USER: aquiatch
+<br/>DATE: [Fri July 6 2012 16:32:37]
+<br/>TAGS: Yoda, Pita, Luke, PAT, Antares-E, Antares-C, Design, DV, DFT, IMPL, PD
+<br/>ENTRY: Testing Status Tool in Safari.
+<br/><br/>USER: aquiatch
+<br/>DATE: [Fri July 6 2012 14:32:2]
+<br/>TAGS: Design, DV, DFT, IMPL, PD
+<br/>ENTRY: No real solutions found regarding IE Document Modes.
+<br/><br/>USER: aquiatch
+<br/>DATE: [Fri July 6 2012 14:28:53]
+<br/>TAGS: Design, DV, DFT, IMPL, PD
+<br/>ENTRY: Status Tool on Firefox seems to be working properly.
+<br/><br/>USER: aquiatch
+<br/>DATE: [Mon Jun 25 2012 12:12:41]
+<br/>TAGS: CBS, Design
+<br/>ENTRY: Testing add status page on Firefox.
+<br/><br/>USER: wstjohn
+<br/>DATE: [Thu Jun 07 2012 11:10:59]
+<br/>TAGS: PAT, PAC, Design
+<br/>ENTRY: testing1
+<br/><br/>

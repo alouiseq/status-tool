@@ -1,0 +1,300 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+
+<!--This HTML code displays the add status design of the Status Tool-->
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=9">
+
+<title>Add Status</title>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+
+<style type="text/css">
+/* sets the color of links */
+a:link {color:#FF0000;}
+a:visited {color:#FF0000;}
+a#this {color:blue}
+
+.headers {text-align:center;}  /* headers on each page should be centered */
+#addstatus {font-size:large;}  /* size of current page's title */
+
+/* create some space around the headers */
+h2 {margin:0px;padding:0px;}   
+h4 {margin:10px;padding:0px;}   
+
+/* set styles for attribute lists area */
+textarea {}
+.attributes {
+   border:2px solid black;
+   width:73%;
+}
+
+/* set margin for attribute lists area */
+.listA,.listB,.listC,.listD {
+   margin-left:20px;
+   margin-bottom:20px;
+}
+
+/* set color and font for OR and AND relationships of attributes */
+.OR { 
+   margin-left:82%;
+   font-size:large;
+   color:red;
+}
+.AND {
+   margin-left:72%;
+   font-size:large;
+   color:blue;
+}
+</style>
+
+<script type="text/javascript">
+// This function creates a cookie to store user attributes 
+function setCookie(c_name,value,exdays) {
+   var exdate=new Date();
+   exdate.setDate(exdate.getDate() + exdays);
+   var c_value=escape(value) + ((exdays==null) ? "" : ";expires="+exdate.toUTCString());
+   document.cookie=c_name + "=" + c_value;
+}
+
+// This function reads in user's attributes from the cookie
+function getCookie(c_name) {
+   var i,x,y,ARRcookies=document.cookie.split(";");
+   for (i=0;i<ARRcookies.length;i++) {
+      x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
+      y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
+      x=x.replace(/^\s+|\s+$/g,"");
+      if (x==c_name) {
+         return unescape(y);
+      }
+   }
+}
+
+// This function checks if user has saved attributes in cookie and retains previous user web page state 
+function checkCookie(c_name, listType) {
+   var attrValues = getCookie(c_name);
+   if (attrValues!=null && attrValues!="") {
+      var valuesAry = attrValues.split(",");   // create array of attributes from cookie
+      var elemAry = document.getElementsByName(listType); // array of all attributes available on web page
+      
+      // traverse attributes in array and compare with cookie values to retain user's previously checked attributes
+      for (var x in valuesAry) {
+         for (var i=0; i<elemAry.length; i++) {
+            if (valuesAry[x] == elemAry[i].id) {
+	       elemAry[i].checked = true;
+    	       break;
+  	    }
+  	 }
+      }
+   }
+}
+
+// traverse all elements of Chips, Superblocks, Blocks, and Functions array from text file and 
+// add into corresponding attribute section on the web page
+function insertAttribute(ary, listType, attrType) {
+var count = 0;
+var flag = 0;
+   for (var iterator in ary) {    // ary is attribute array from text file
+      var linebr = document.createElement('br');    // line break to fit only checkboxes per line
+      var data = document.createElement('input');   // create checkbox 
+      data.type = "checkbox";
+      data.name = listType;         // listType is A|B|C|D
+      data.className = listType;  
+      data.id = ary[iterator];
+      var label_chip = document.createElement('label');  // create name associated with checkbox
+      label_chip.htmlFor = data.id;
+      label_chip.innerHTML = ary[iterator];
+      var attr = document.getElementById(attrType);   
+ 
+      // insert checkbox and associated name into attribute section of page
+      var divvy = document.createElement('div');
+      divvy.style.display="inline-block";
+      divvy.appendChild(data); 
+      divvy.appendChild(label_chip);
+      attr.appendChild(divvy);     
+      count++;
+   }
+} // end function insertAttribute
+
+// Function to Select All elements in Attribute List
+function selectAll (attr_type) {
+   if (attr_type == "chips") var elems = document.getElementsByName('listA');
+   if (attr_type == "superblocks") var elems = document.getElementsByName('listB');
+   if (attr_type == "blocks") var elems = document.getElementsByName('listC');
+   if (attr_type == "functions") var elems = document.getElementsByName('listD');
+      
+   for (var i=0; i<elems.length; i++) 
+         elems[i].checked = true; 
+}
+
+// Function to Clear All elements in Attribute List
+function clearAll (attr_type) {
+   if (attr_type == "chips") var elems = document.getElementsByName('listA');
+   if (attr_type == "superblocks") var elems = document.getElementsByName('listB');
+   if (attr_type == "blocks") var elems = document.getElementsByName('listC');
+   if (attr_type == "functions") var elems = document.getElementsByName('listD');
+      
+   for (var i=0; i<elems.length; i++) 
+         elems[i].checked = false; 
+}
+
+// go through the attributes lists and save them as cookies 
+function myAttributes () {
+   var chips = document.getElementsByName('listA');
+   var superblocks = document.getElementsByName('listB');
+   var blocks = document.getElementsByName('listC');
+   var functions = document.getElementsByName('listD');
+   var buffer = "";     // holds all the attribute elements that user selected
+   var attrType = "";
+   var attrName = ""; 
+
+   // save a cookie for each attribute list
+   for(var x=0; x<4; x++) {
+      if (x == 0) {attrType = chips; attrName = "chips";}
+      else if (x == 1) {attrType = superblocks; attrName = "superblocks";}
+      else if (x == 2) {attrType = blocks; attrName = "blocks";}
+      else if (x == 3) {attrType = functions; attrName = "functions";}
+
+      for (var i=0; i<attrType.length; i++) {
+         if (attrType[i].checked)
+            buffer += attrType[i].id + ",";   // comma separated elements in buffer
+      }
+      buffer = buffer.replace(/,$/, "");   // get rid of the last comma at the end of buffer string
+      setCookie(attrName, buffer, 365);
+      buffer = "";
+   }
+   alert("Attributes Saved");
+}
+
+// Save user status to text file
+function saveStatus() {
+   var status_entry = document.getElementById("entry");   // retrieve user's status entry
+   var entry = status_entry.value;
+
+   // get today's local date
+   var d = new Date();  
+   var dayOfWeek = d.getDay();
+   var month = d.getMonth();
+   var day = d.getDate();
+   var year = d.getFullYear();    
+   var hours = d.getHours();
+   var minutes = d.getMinutes();
+   var seconds = d.getSeconds();
+   var datee = dayOfWeek + " " + month + " " + day + " " + year + " " + hours + ":" + minutes + ":" + seconds;
+   //alert(datee);
+
+   // grab user's attribute selections and create a status entry without saving the attributes in a cookie
+   var chips = document.getElementsByName('listA');
+   var superblocks = document.getElementsByName('listB');
+   var blocks = document.getElementsByName('listC');
+   var functions = document.getElementsByName('listD');
+   var attrType = "";
+   var attributes = "";   // holds all the attributes the user selected
+
+   // combine all saved attribute entries separated by a comma unless no attribute selected from attribute section
+   for(var x=0; x<4; x++) {
+      if (x == 0) {attrType = chips; attrName = "chips";}
+      else if (x == 1) {attrType = superblocks; attrName = "superblocks";}
+      else if (x == 2) {attrType = blocks; attrName = "blocks";}
+      else if (x == 3) {attrType = functions; attrName = "functions";}
+
+      for (var i=0; i<attrType.length; i++) {
+         if (attrType[i].checked)
+            attributes += attrType[i].id + ",";   // comma separated elements in attributes
+      }
+   }
+
+   attributes = attributes.replace(/,$/, "");   // get rid of the last comma at the end of attributes string
+
+   var datastr = entry + "::" + datee + "::" + attributes;
+   //alert(datastr);
+
+   // ajax call to script to write to status report log
+   $.ajax({
+      url: "save_Status.cgi",
+      async: false,
+      data: datastr,
+      success: function(result) {
+         //alert(result);
+	 alert ("ENTRY SAVED");
+      },
+      error: function(xhr) {
+         alert("Error reported back to dtracker.html");
+      }
+   });
+}
+</script>
+</head>
+
+<body>
+<!-- open and read text file -->
+<script type="text/javascript" src="attributes.txt"></script>
+
+<div class="headers">
+<h2><b>SiE Status Tool</b></h2>
+<h4><a href="http://sseweb.cisco.com/antares/stattool/stattracker.html"><b>HOME</b></a>
+| <a id="this" href="http://sseweb.cisco.com/antares/stattool/addstatus.html">ADD STATUS</a>
+| <a href="http://sseweb.cisco.com/antares/stattool/statusreport.html">VIEW STATUS REPORT</a>
+| <a href="http://sseweb.cisco.com/antares/stattool/searchstatus.html">SEARCH STATUS</a></h4>
+<b id="addstatus">ADD STATUS</b>
+</div>
+
+<p><b>STATUS ENTRY:</b>
+<input type="button" style="margin-left:600px;" name="save_stat" id="save_stat" value="SAVE STATUS" onClick="saveStatus()" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<input type="button" name="save_att" id="save_att" value="Remember My Attributes" onClick="myAttributes()"/>
+<textarea rows="6" cols="86" id="entry"></textarea></p><br/>
+
+<div><b>ATTRIBUTES:</b><br/></div>
+<b><i style="padding-right:65px";>CHIP(s)</i></b>&nbsp;
+<div class="attributes" id="chips">
+<input type="button" name="sel" class="sel" value="Select All" onClick="selectAll('chips')" />&nbsp;&nbsp;
+<input type="button" name="nosel" class="nosel" value="Clear All" onClick="clearAll('chips')" />
+<span class="OR" title="Attributes within this area have an 'OR' relationship">OR</span><br/><br/>
+</div>
+<span class="AND" title="Attributes across the boxed areas have an 'AND' relationship">AND</span><br/>
+<b><i>SUPERBLOCK(s)</i></b>
+<div class="attributes" id="superblocks">
+<input type="button" name="sel" class="sel" value="Select All" onClick="selectAll('superblocks')" />&nbsp;&nbsp;
+<input type="button" name="nosel" class="nosel" value="Clear All" onClick="clearAll('superblocks')" />
+<span class="OR" title="Attributes within this area have an 'OR' relationship">OR</span><br/><br/>
+</div>
+<span class="AND" title="Attributes across the boxed areas have an 'AND' relationship">AND</span><br/>
+<b><i style="padding-right:53px";>BLOCK(s)</i></b>
+<div class="attributes" id="blocks">
+<input type="button" name="sel" class="sel" value="Select All" onClick="selectAll('blocks')" />&nbsp;&nbsp;
+<input type="button" name="nosel" class="nosel" value="Clear All" onClick="clearAll('blocks')" />
+<span class="OR" title="Attributes within this area have an 'OR' relationship">OR</span><br/><br/>
+</div>
+<span class="AND" title="Attributes across the boxed areas have an 'AND' relationship">AND</span><br/>
+<b><i style="padding-right:22px";>FUNCTION(s)</i></b>
+<div class="attributes" id="functions">
+<input type="button" name="sel" class="sel" value="Select All" onClick="selectAll('functions')" />&nbsp;&nbsp;
+<input type="button" name="nosel" class="nosel" value="Clear All" onClick="clearAll('functions')" />
+<span class="OR" title="Attributes within this area have an 'OR' relationship">OR</span><br/><br/>
+</div><br/>
+
+<script type="text/javascript">
+// call function to insert attribute lists to the web page
+insertAttribute (Chips, "listA", "chips"); 
+insertAttribute (Superblocks, "listB", "superblocks"); 
+insertAttribute (Blocks, "listC", "blocks"); 
+insertAttribute (Functions, "listD", "functions"); 
+
+// check cookies for previously checked attributes
+checkCookie("chips", "listA");
+checkCookie("superblocks", "listB");
+checkCookie("blocks", "listC");
+checkCookie("functions", "listD");
+</script>
+
+<hr style="width:75%"></hr>
+
+<div class="headers">
+<a href="http://sseweb.cisco.com/antares/stattool/stattracker.html">HOME</a>
+| <a id="this" href="http://sseweb.cisco.com/antares/stattool/addstatus.html">ADD STATUS</a>
+| <a href="http://sseweb.cisco.com/antares/stattool/statusreport.html">VIEW STATUS REPORT</a>
+| <a href="http://sseweb.cisco.com/antares/stattool/searchstatus.html">SEARCH STATUS</a>
+</div>
+
+</body>
+</html>

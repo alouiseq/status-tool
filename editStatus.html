@@ -1,0 +1,175 @@
+<html>
+<head>
+<title>Edit Status</title>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+
+<style type="text/css">
+h2 { text-align:center; }
+</style>
+
+<script type="text/javascript" src="attributes.txt"></script>
+
+<script type="text/javascript">
+// set flags to check if content has been modified
+var flag_tag = 0;
+var flag_entry = 0;
+var username = "";  // current user on the web page
+
+// grabs the data string passed with the url (data that follows the character ? in the url)
+var query = window.location.search;
+
+// Skip the leading ? in the data string passed in the url, which should always be there
+if (query.substring(0, 1) == '?') {
+   query = query.substring(1);
+}
+
+query = unescape(query);     // decode encoded data received to be able to read and display it
+var data = query.split('/');
+/* format of data array:
+   data[0] == status entry
+   data[1] == attributes 
+   data[2] == date 
+   data[3] == skip or no skip
+*/ 
+
+// Calls script to extract server authenticated user
+function extract_user() {
+   $.ajax ({
+      url: "extract_user.cgi",
+      async: false,
+      success: function(result) {
+	  username = result;
+	  //alert(username);
+      },
+      error: function(xhr) {
+	 alert("Error reported back to dtracker.html");
+      }
+   });
+} // end function extract_user
+
+// place status info in their corresponding textarea
+function insertData () {
+   // remove updated indicator from the actual data
+   var tags_data = data[1].replace("\\*Updated\\*", "");
+   var status_data = data[0].replace("\\*Updated\\*", "");
+
+   // place data into text area boxes for possible update
+   document.getElementById('dateArea').value = data[2];
+   document.getElementById('tagsArea').value = tags_data;
+   document.getElementById('statusArea').value = status_data;
+
+   // check if user of status entry is the same as user viewing entry: only same user could edit status entry
+   if ((data[3] != username) && (data[3] != "skip")) {   // skip: assumes that user is both the owner and viewer
+      document.getElementById('tagsArea').disabled="disabled";
+      document.getElementById('statusArea').disabled="disabled";
+   }
+}
+
+// Updates user status entry and add to report file
+function handle_update() {
+   var entry = document.getElementById("statusArea").value;   // retrieve user's status entry
+   if (flag_entry == 1) entry += " *Updated*";
+   var tags = document.getElementById("tagsArea").value;   // retrieve user's status entry
+
+   if (flag_tag == 1) {
+      // grab all the attributes from the text file
+      var chips = Chips;
+      var superblocks = Superblocks;
+      var blocks = Blocks;
+      var functions = Functions;
+      
+      var myAtts = tags.replace(/ /g, "");
+      myAtts = myAtts.split(",");
+      var checker = 0;      // check flag to see if user attributes is valid
+
+      // loop to check if user attributes are in the attributes database
+      for (x in myAtts) {
+         for (i=0; i<chips.length; i++) {
+            if (myAtts[x] == chips[i]) {
+	       checker = 1;
+	       break;
+ 	    }
+	 }
+	 if (!checker) {
+	    for (i=0; i<superblocks.length; i++) {
+	       if (myAtts[x] == superblocks[i]) {
+		  checker = 1;
+		  break;
+	       }
+	    }
+	 }
+	 if (!checker) {
+	    for (i=0; i<blocks.length; i++) {
+	       if (myAtts[x] == blocks[i]) {
+		  checker = 1;
+		  break;
+	       }
+	    }
+	 }
+	 if (!checker) {
+	    for (i=0; i<functions.length; i++) {
+	       if (myAtts[x] == functions[i]) {
+		  checker = 1;
+		  break;
+	       }
+	    }
+	 }
+	 if (!checker) {
+	    alert("'" + myAtts[x] + "' IS NOT A VALID TAG!");
+	    return;
+	 }
+	 checker = 0;
+      }
+	    
+      tags += " *Updated*";
+   }  
+
+   var d = new Date();  // today's date
+   var dayOfWeek = d.getDay();
+   var month = d.getMonth();
+   var day = d.getDate();
+   var year = d.getFullYear();    
+   var hours = d.getHours();
+   var minutes = d.getMinutes();
+   var seconds = d.getSeconds();
+   var datee = dayOfWeek + " " + month + " " + day + " " + year + " " + hours + ":" + minutes + ":" + seconds;
+
+   // combine all saved attribute entries separated by a comma unless no attribute selected from attribute section
+   var datastr = entry + "::" + datee + "::" + tags;
+   //alert (datastr);
+
+   // ajax call to script to write to status report log
+   $.ajax({
+      url: "save_Status.cgi",
+      async: false,
+      data: datastr,
+      success: function(result) {
+	 //alert(result);
+	 alert ("ENTRY SAVED");
+	 window.location = "stattracker.html";
+      },
+      error: function(xhr) {
+	 alert("Error reported back to dtracker.html");
+      }
+   });
+}
+</script>
+</head>
+
+<body>
+<h2><b>Edit Status</b></h2>
+<h3>Date Created:<br/></h3>
+<input type="text" id="dateArea" size="25" title="Timestamp" disabled />
+<h3>My Selected Tags:<br/></h3>
+<textarea id="tagsArea" cols="50" rows="2" title="Comma separated tags" onchange="flag_tag=1;"></textarea>
+<h3>My Status Entry:<br/></h3>
+<textarea id="statusArea" cols="100" rows="10" title="Status entry" onchange="flag_entry=1;"></textarea><br/>
+<input type="button" id="update" value="Update My Entry" onclick="handle_update()" />
+
+<script type="text/javascript">
+extract_user();
+insertData();
+</script>
+
+</body>
+</html>

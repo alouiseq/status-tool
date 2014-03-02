@@ -1,0 +1,639 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+
+<!--This HTML code displays the search status design of the Status Tool-->
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=9">
+
+<title>Search Status</title>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" media="all" href="/auto/dtracker/jquery_UI_datepicker/themes/redmond/jquery-ui-1.8.18.custom.css" />
+<link rel="stylesheet" type="text/css" media="all" href="/auto/dtracker/jquery_UI_datepicker/themes/redmond/jquery-ui-1.8.18.aquiatch.css" />
+<script type="text/javascript" src="/auto/dtracker/jquery_UI_datepicker/themes/redmond/jquery-ui-1.8.18.custom.min.js"></script>
+
+<style type="text/css">
+/* sets the color of links */
+a:link {color:#FF0000;}
+a:visited {color:#FF0000;}
+a#this {color:blue}
+
+.headers, .headers_date {text-align:center;}  /* headers on each page should be centered */
+#searchstatus {font-size:large;}  /* size of current page's title */
+
+/* create some space around the headers */
+h2 {margin:0px;padding:0px;}   
+h4 {margin:10px;padding:0px;}   
+
+/* clone & edit link */
+.edit {font-size:small;}
+
+/* allow scrolling for status entries */
+.scrollme { 
+   max-width:600px;
+   max-height:40px;
+   overflow:auto; 
+}
+
+td.headers,td.headers_date {
+   background-color:#9090C0;
+   color:white;
+}
+td.entries,td.entries_date {
+   background-color:#EDEDFF;
+}
+
+/* separator between status information */
+td.headers_date,td.entries_date {
+   border-bottom-style:ridge;
+   border-bottom-width:thick; 
+   padding-bottom:20px;
+}
+
+textarea {}
+.attributes {
+   border:2px solid black;
+   width:73%;
+}
+
+.listA,.listB,.listC,.listD {
+   margin-left:20px;
+   margin-bottom:20px;
+}
+
+/* set color and font for OR and AND relationships of attributes */
+.OR { 
+   margin-left:82%;
+   font-size:large;
+   color:red;
+}
+.AND {
+   margin-left:72%;
+   font-size:large;
+   color:blue;
+}
+</style>
+
+<script type="text/javascript">
+// This function creates a cookie to store user attributes 
+function setCookie(c_name,value,exdays) {
+   var exdate=new Date();
+   exdate.setDate(exdate.getDate() + exdays);
+   var c_value=escape(value) + ((exdays==null) ? "" : ";expires="+exdate.toUTCString());
+   document.cookie=c_name + "=" + c_value;
+}
+
+// This function reads in user's attributes from the cookie
+function getCookie(c_name) {
+   var i,x,y,ARRcookies=document.cookie.split(";");
+   for (i=0;i<ARRcookies.length;i++) {
+      x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
+      y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
+      x=x.replace(/^\s+|\s+$/g,"");
+      if (x==c_name) {
+         return unescape(y);
+      }
+   }
+}
+
+// This function checks if user has saved attributes in cookie and retains previous user web page state 
+function checkAttr_Cookie(c_name, listType) {
+   var attrValues = getCookie(c_name);
+   if (attrValues!=null && attrValues!="") {
+      var valuesAry = attrValues.split(",");   // create array of attributes from cookie
+      var elemAry = document.getElementsByName(listType); // array of all attributes available on web page
+      
+      // traverse attributes in array and compare with cookie values to retain user's previously checked attributes
+      for (var x in valuesAry) {
+         for (var i=0; i<elemAry.length; i++) {
+            if (valuesAry[x] == elemAry[i].id) {
+	       elemAry[i].checked = true;
+    	       break;
+  	    }
+  	 }
+      }
+   }
+}
+
+// This function checks and retains user's previous selection of the type of status report it wants to generate
+function checkGenRpt_Cookie() {
+/*   alert(document.cookie);
+   var value = getCookie("reportSelect");
+   if (value!=null && value!="") {
+      var elemAry = document.getElementsByName("criterion"); // array containing either dateAll or dateRange
+      
+      // traverse the array and compare with cookie value to retain user's previous selection
+      for (var i=0; i<elemAry.length; i++) {
+	 if (value == elemAry[i].value) {
+	    elemAry[i].checked = true;
+            //if (elemAry[i].value == "dateRange") $("span#date_select").show();
+	    //else $("span#date_select").hide();
+	    select_reportType (elemAry[i].value);
+	    break;
+	 }
+      }
+   }
+*/}
+
+// traverse all elements of Chips, Superblocks, Blocks, and Functions array from text file and 
+// add into corresponding attribute section of web page
+function insertAttribute(ary, listType, attrType) {
+   var count = 0;
+   var flag = 0;
+   for (var iterator in ary) {    // ary is attribute array from text file
+      var linebr = document.createElement('br');    // line break to fit only checkboxes per line
+      var data = document.createElement('input');   // create checkbox 
+      data.type = "checkbox";
+      data.name = listType;         // listType is A|B|C|D
+      data.className = listType;  
+      data.id = ary[iterator];
+      var label_chip = document.createElement('label');  // create name associated with checkbox
+      label_chip.htmlFor = data.id;
+      label_chip.innerHTML = ary[iterator]; 
+      var attr = document.getElementById(attrType);
+
+      // insert checkbox and associated name into attribute section of page
+      var divvy = document.createElement('div');
+      divvy.style.display="inline-block";
+      divvy.appendChild(data); 
+      divvy.appendChild(label_chip);
+      attr.appendChild(divvy);     
+      count++;
+   }
+} // end function insertAttribute
+
+// Function to Select All elements in Attribute List
+function selectAll (attr_type) {
+   if (attr_type == "chips") var elems = document.getElementsByName('listA');
+   if (attr_type == "superblocks") var elems = document.getElementsByName('listB');
+   if (attr_type == "blocks") var elems = document.getElementsByName('listC');
+   if (attr_type == "functions") var elems = document.getElementsByName('listD');
+      
+   for (var i=0; i<elems.length; i++) 
+         elems[i].checked = true; 
+}
+
+// Function to Clear All elements in Attribute List
+function clearAll (attr_type) {
+   if (attr_type == "chips") var elems = document.getElementsByName('listA');
+   if (attr_type == "superblocks") var elems = document.getElementsByName('listB');
+   if (attr_type == "blocks") var elems = document.getElementsByName('listC');
+   if (attr_type == "functions") var elems = document.getElementsByName('listD');
+      
+   for (var i=0; i<elems.length; i++) 
+         elems[i].checked = false; 
+}
+
+// go through the attributes lists and save them as cookies 
+function myAttributes () {
+   var chips = document.getElementsByName('listA');
+   var superblocks = document.getElementsByName('listB');
+   var blocks = document.getElementsByName('listC');
+   var functions = document.getElementsByName('listD');
+   var buffer = "";     // holds all the attribute elements that user selected
+   var attrType = "";
+   var attrName = ""; 
+
+   // save a cookie for each attribute list
+   for(var x=0; x<4; x++) {
+      if (x == 0) {attrType = chips; attrName = "chips";}
+      else if (x == 1) {attrType = superblocks; attrName = "superblocks";}
+      else if (x == 2) {attrType = blocks; attrName = "blocks";}
+      else if (x == 3) {attrType = functions; attrName = "functions";}
+
+      for (var i=0; i<attrType.length; i++) {
+         if (attrType[i].checked)
+            buffer += attrType[i].id + ",";   // comma separated elements in buffer
+      }
+      buffer = buffer.replace(/,$/, "");   // get rid of the last comma at the end of buffer string
+      setCookie(attrName, buffer, 365);
+      buffer = "";
+   }
+   //alert("Search Saved");
+}
+
+// This function reveals or hides the attributes on the page 
+function toggleAttributes (tog) {
+   if (tog == 0) {  // hide 
+      $("#all_attributes").hide();
+   }
+   else { // tog is 1 and represents show 
+      $("#all_attributes").show();
+   }
+}   // end toggleAttributes function
+
+// these variables are declared outside the function to act as global variables
+var first_date = "";
+var second_date = "";
+
+// This function reveals or hides the details of selected types of report generation 
+function select_reportType (type) {
+   if (type == "dateAll") {   
+      $("span#date_select").hide();
+   }
+   else if (type == "dateRange") {
+      $("span#date_select").show();
+   }
+/*   else if (type == "hierarchical") {
+      $("span#date_select").hide();
+      $("div#hierarchical_select").show();
+   }
+*/
+
+   // Check which elements are selected and place a border around them
+   var roots = document.getElementsByName('criterion'); 
+   for(i=0; i<roots.length; i++) {
+      if (roots[i].checked) {
+	 roots[i].disabled = true;   // disable radio button if selected
+	 if (roots[i].value == "dateAll")
+	    document.getElementById('all_d').style.border="thin solid #0000FF";
+	 else if (roots[i].value == "dateRange")
+	    document.getElementById('date_r').style.border="thin solid #0000FF";
+      }
+      else { // close border on element if radio button not selected
+	 roots[i].disabled = false;   // enable radio button if selected
+	 if (roots[i].value == "dateAll")
+	    document.getElementById('all_d').style.border="";
+	 else if (roots[i].value == "dateRange")
+	    document.getElementById('date_r').style.border="";
+      }
+   }
+   var subroots = document.getElementsByName('criterion2'); 
+   for(i=0; i<subroots.length; i++) {
+      if (subroots[i].checked) {
+	 if (subroots[i].value == "usersAll")
+	    document.getElementById('all_u').style.border="thin solid #0000FF";
+	 else if (subroots[i].value == "Me")
+	    document.getElementById('me').style.border="thin solid #0000FF";
+	 else // subroots[i].value == "hierarchical"
+	    document.getElementById('hier').style.border="thin solid #0000FF";
+      }
+      if (!subroots[i].checked) { // close border on element if radio button not selected
+	 if (subroots[i].value == "usersAll")
+	    document.getElementById('all_u').style.border="";
+	 else if (subroots[i].value == "Me")
+	    document.getElementById('me').style.border="";
+	 else (subroots[i].value == "hierarchical")
+	    document.getElementById('hier').style.border="";
+      }
+   }
+}   // end select_reportType function
+
+// Extracts date from datepicker's text area and assigns to global variables 
+function handle_date (e) {
+   var handle_date_targ;
+   if (!e) var e = window.event;
+   if (e.target) handle_date_targ = e.target;
+   else if (e.srcElement) handle_date_targ = e.srcElement;
+   if (handle_date_targ.nodeType == 3)  // defeat Safari bug
+      handle_date_targ = handle_date_targ.parentNode;
+
+   $("#"+handle_date_targ.id).datepicker("option", "dateFormat", 'mm/dd/yy');  // ensures proper date format
+   var date = eval(handle_date_targ.id).value;     // ???
+
+   if (handle_date_targ.id == "date1") var order = 1;
+   else var order = 2;
+
+   // assigns from and to date range to global variables
+   if (order == 1) {
+      first_date = date; 
+   }
+   else {  // order is 2
+      second_date = date;
+      //alert (first_date + " : " + second_date);
+   }
+}
+
+// Handles data range selection when the Date Range radio button is selected
+function handle_dateRange () {
+   // the code below creates the first datepicker to allow user to select a date range of the desired status report
+   var from = document.createTextNode('FROM: ');
+   document.getElementById('date_select').appendChild(from);
+   var sel_date1 = "date1";
+   window[sel_date1] = document.createElement('input');
+   window[sel_date1].type = "text";
+   window[sel_date1].size = 10;
+   document.getElementById('date_select').appendChild(window[sel_date1]);
+   window[sel_date1].id = sel_date1;
+   $("#"+sel_date1).datepicker();	// create a datepicker for FROM date 
+   var first_date = window[sel_date1].onchange=handle_date;    // call function when the first date is selected
+
+   // the code below is for the second datepicker
+   var to = document.createTextNode('  TO: ');
+   document.getElementById('date_select').appendChild(to);
+   var sel_date2 = "date2";
+   window[sel_date2] = document.createElement('input');
+   window[sel_date2].type = "text";
+   window[sel_date2].size = 10;
+   document.getElementById('date_select').appendChild(window[sel_date2]);
+   window[sel_date2].id = sel_date2;
+   $("#"+sel_date2).datepicker();	// create a datepicker for TO date 
+   var second_date = window[sel_date2].onchange=handle_date;      // call function when the second date is selected
+}  // end function handle_dateRange
+
+// This function sends the status entry to another page to be displayed when the edit link is selected
+function sendData(e) {
+   var targ;
+   if (!e) var e = window.event;
+   if (e.target) targ = e.target;
+   else if (e.srcElement) targ = e.srcElement;
+   if (targ.nodeType == 3)  // defeat Safari bug
+      targ = targ.parentNode;
+
+   // Initialize variable packed or get the word 'undefined'; packed will contain the data to be transmitted to other html
+   var packed = "";
+   var data = dataAry[targ.id];   // retrieve status string from array based on selected link
+   packed = escape(data);   // escape is used to encode data to enable portability and transmission across networks
+
+   // location provides information about the current url and in this case,  
+   // the url is another html that will open and replace the current page
+   window.location = "editStatus.html?" + packed;  // ? indicates that what follows is a query string 
+} // end function sendData
+
+// This function generates a status report based on the Attribute criteria and report type selected
+function genReport () {
+   // save user attributes as a cookie if changed
+   myAttributes();
+
+   // grab attributes from cookie
+   var chips = getCookie("chips");
+   var superblocks = getCookie("superblocks");
+   var blocks = getCookie("blocks");
+   var functions = getCookie("functions");
+
+   // combine all saved attribute entries separated by a comma unless no attribute selected from attribute section
+   // Note: double colons '::' represent a division between entries, date, and attributes and double slashes '//' represent a division between attribute sets
+   var attributes = "";
+   if (chips) attributes += chips + "//";
+   if (superblocks) attributes += superblocks + "//";
+   if (blocks) attributes += blocks + "//";
+   if (functions) attributes += functions;
+   attributes = attributes.replace(/\/\/$/, "");   // get rid of the last two slashes at the end of attributes string
+   
+   // check if user desires a report containing all logged entries or restricted to a specific date range
+   var choice = document.getElementsByName("criterion");
+   var index;    // contains the index of the selected radio button
+   for (i=0; i<choice.length; i++) {
+      if (choice[i].checked == true) { 
+         index = i;
+         break;
+      }
+   }
+
+   // check if user desires to view a report of all users' entries or just the user itself
+   var choice2 = document.getElementsByName("criterion2");
+   var index2;    // contains the index of the selected radio button
+   for (i=0; i<choice2.length; i++) {
+      if (choice2[i].checked == true) { 
+         index2 = i;
+         break;
+      }
+   }
+   
+   // datastr will contain the attributes and date range selected to be passed as an argument to a report generation script
+   // format of datastr:   first_date : second_date : users : attributes
+   if (choice[index].value == "dateAll") datastr = "::::all_users::" + attributes;   // double colons signify that no date range has been specified
+   else if (choice[index].value == "dateRange") datastr = first_date + "::" + second_date + "::all_users::" + attributes;
+  
+   if (choice2[index2].value == "Me") datastr = datastr.replace("all_users", "me");  // if user selects to only view its own report entries 
+ 
+   //alert(datastr);
+ 
+   // call script to generate report
+   $.ajax ({
+      url: "search_Result.cgi",
+      async: false,
+      data: datastr,
+      success: function(result) {
+	   //alert(result);
+      },
+      error: function(xhr) {
+	 alert("Error reported back to dtracker.html");
+      }
+   });
+} // end genReport function
+
+var dataAry = new Array();    // global data array holding all user status entry information
+
+function searchStat() {
+   $("#all_attributes").hide();   // hide attributes list
+   document.getElementById('hide').checked = true;
+   genReport();   // function will call script to generate result from search
+
+   // remove all rows from table for new searches
+   var table = document.getElementById('tab');
+   for(z=table.rows.length-1; z>=0; z--) {
+       table.deleteRow(z);
+   }
+
+   // Calls script to extract server authenticated user
+   var username = "";     // contains the user accessing the status tracker website
+   $.ajax ({
+      url: "extract_user.cgi",
+      async: false,
+      success: function(result) {
+	  username = result;
+      },
+      error: function(xhr) {
+	 alert("Error reported back to dtracker.html");
+      }
+   });
+
+   // textfile of status report
+   var myfile = "searchResult_" + username + ".txt";
+
+   // Use XMLHttpRequest to read status report from a text file to a string
+   xmlhttp = new XMLHttpRequest();
+   xmlhttp.open("GET", myfile, true);
+   xmlhttp.send();
+
+   xmlhttp.onreadystatechange=function() {   // proceed only after server processes request to read text file
+      if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+	 var content = xmlhttp.responseText;   // read entries from text file
+	 var group = content.split("\n\n");    // separate individual status info from report
+	 var count = 1;	 // starting count of number of status info to be displayed
+
+	 for (x=0; x<group.length; x++) {    // x is the last entry in the report to display recent to oldest
+	    var table = document.getElementById('tab');  // obtain table for status information
+
+	    // insert row into table and insert user header as the first column of the table
+	    var tab_row = table.insertRow(-1);
+	    var user = tab_row.insertCell(-1);
+	    user.className = "headers";
+	    user.colSpan=2;
+	    user.innerHTML = "<b>User</b>";
+
+	    // insert column and display username from status report
+	    var entry = tab_row.insertCell(-1);
+	    entry.className = "entries";
+	    userName = group[x].match(/USER.*/);
+	    userName = userName[0].replace("USER: ","");
+	    var node = document.createTextNode(userName);
+	    entry.appendChild(node);
+	    
+            // insert row into table and insert status header as the first column of the table
+	    var tab_row = table.insertRow(-1);
+	    var status = tab_row.insertCell(-1);
+	    status.className = "headers";
+	    status.colSpan=2;
+	    status.innerHTML = "<b>Status</b>";
+
+	    // insert column and display user status entry from status report
+	    var entry = tab_row.insertCell(-1);
+	    entry.className = "entries";
+	    statusEntry = group[x].match(/ENTRY.*/);
+	    statusEntry = statusEntry[0].replace("ENTRY: ","");
+	    var node = document.createTextNode(statusEntry);
+	    var scroll = document.createElement('div');     // need div element to wrap content and allow scrolling
+	    scroll.className = "scrollme";                  // because table does not support scrolling 
+	    scroll.appendChild(node);
+	    entry.appendChild(scroll);
+
+	    // insert clone and edit link to edit status entries
+	    var edit = tab_row.insertCell(-1);
+	    edit.className = "edit";
+	    link = document.createElement('a');
+	    link.id = count;  // track which hyperlink is selected by user since each status entry is editable
+	    link.href = "#";   // significance??
+	    link.onclick = sendData;
+	    link.appendChild(document.createTextNode("CLONE/EDIT"));
+	    edit.appendChild(link);
+
+	    // insert row into table and insert attributes header as the first column of the table 
+	    var tab_row = table.insertRow(-1);
+	    var attributes = tab_row.insertCell(-1);
+	    attributes.className = "headers";
+	    attributes.colSpan=2;
+	    attributes.innerHTML = "<b>Attributes</b>";
+
+	    // insert column and insert user attributes entry from status report
+	    var entry = tab_row.insertCell(-1);
+	    entry.className = "entries";
+	    statusTags = group[x].match(/TAGS.*/);
+	    statusTags = statusTags[0].replace("TAGS: ","");
+	    var node = document.createTextNode(statusTags);
+	    var scroll = document.createElement('div');     // need div element to wrap content and allow scrolling
+	    scroll.className = "scrollme";                  // because table does not support scrolling 
+	    scroll.appendChild(node);
+	    entry.appendChild(scroll);
+
+	    // insert row into table and insert date header as the first column of the table
+	    var tab_row = table.insertRow(-1);
+	    var date = tab_row.insertCell(-1);
+	    date.className = "headers_date";
+	    date.colSpan=2;
+	    date.innerHTML = "<b>Date</b>";
+
+	    // insert column and insert date from status report 
+	    var entry = tab_row.insertCell(-1);
+	    entry.className = "entries_date";
+	    statusDate = group[x].match(/DATE.*/);
+	    statusDate = statusDate[0].replace("DATE: ","");
+	    var node = document.createTextNode(statusDate);
+	    entry.appendChild(node);
+
+	    // place all status info into array
+	    dataAry[count] = statusEntry + "/" + statusTags + "/" + statusDate + "/" + userName;   
+
+	    count++;    // index to traverse through status report on text file
+	 } // end for loop
+      }
+   } // end xmlhttp response processing
+} // end function searchStat
+</script>
+</head>
+
+<body onload="select_reportType('dateAll')">
+
+<!-- open and read text file -->
+<script type="text/javascript" src="attributes.txt"></script>
+
+<div class="headers">
+<h2><b>SiE Status Tool</b></h2>
+<h4><a href="http://stattool/stattracker.html"><b>HOME</b></a>
+| <a href="http://stattool/addstatus.html">ADD STATUS</a>
+| <a href="http://stattool/statusreport.html">VIEW STATUS REPORT</a>
+| <a id="this" href="http://stattool/searchstatus.html">SEARCH STATUS</a></h4>
+<span id="searchstatus"><b>SEARCHED STATUS</b></span><br>
+</div>
+
+<b>Generate report based on:</b><br>
+<span id="all_d"><input type="radio" value="dateAll" name="criterion" checked onClick="select_reportType('dateAll')"/> Date All</span> &nbsp;&nbsp;
+<span id="date_r"><input type="radio" value="dateRange" name="criterion" onClick="select_reportType('dateRange')"/> Date Range</span> &nbsp;&nbsp; 
+<span id="date_select"> | &nbsp;&nbsp;&nbsp;</span>
+<input type="button" id="search" style="margin-left:90px" value="Search Status" onclick="searchStat()" />
+<input type="button" id="remember" style="margin-left:40px" value="Remember My Attributes" onClick="myAttributes()" />
+<br/>&nbsp;&nbsp;<span id="all_u"><input type="radio" value="usersAll" name="criterion2" checked onClick="select_reportType('usersAll')" />Users All</span> &nbsp;&nbsp;
+<span id="me"><input type="radio" value="Me" name="criterion2" onClick="select_reportType('Me')" /> Me </span>&nbsp;&nbsp;
+<span id="hier"><input type="radio" value="hierarchical" name="criterion2" disabled onClick="select_reportType('hierarchical')" />Hierarchical</span> &nbsp;&nbsp;
+
+<script type="text/javascript">
+//Function calls below implements various report types 
+handle_dateRange();
+</script>
+
+<!--List Attributes on web page-->
+<br/><br/><div><b>ATTRIBUTES:</b>&nbsp;&nbsp;
+Show<input type="radio" name="toggle" id="show" checked onclick="toggleAttributes(1)" />&nbsp;&nbsp;
+Hide<input type="radio" name="toggle" id="hide" onclick="toggleAttributes(0)" />
+<br/></div>
+<hr style="width:75%;margin-left:0px;"></hr>
+<div id="all_attributes">
+<b><i>CHIP(s)</i></b>&nbsp;
+<div class="attributes" id="chips">
+<input type="button" name="sel" class="sel" value="Select All" onClick="selectAll('chips')" />&nbsp;&nbsp;
+<input type="button" name="nosel" class="nosel" value="Clear All" onClick="clearAll('chips')" />
+<span class="OR" title="Attributes within this area have an 'OR' relationship">OR</span><br/><br/>
+</div>
+<span class="AND" title="Attributes across the boxed areas have an 'AND' relationship">AND</span><br/>
+<b><i>SUPERBLOCK(s)</i></b>
+<div class="attributes" id="superblocks">
+<input type="button" name="sel" class="sel" value="Select All" onClick="selectAll('superblocks')" />&nbsp;&nbsp;
+<input type="button" name="nosel" class="nosel" value="Clear All" onClick="clearAll('superblocks')" />
+<span class="OR" title="Attributes within this area have an 'OR' relationship">OR</span><br/><br/>
+</div>
+<span class="AND" title="Attributes across the boxed areas have an 'AND' relationship">AND</span><br/>
+<b><i>BLOCK(s)</i></b>
+<div class="attributes" id="blocks">
+<input type="button" name="sel" class="sel" value="Select All" onClick="selectAll('blocks')" />&nbsp;&nbsp;
+<input type="button" name="nosel" class="nosel" value="Clear All" onClick="clearAll('blocks')" />
+<span class="OR" title="Attributes within this area have an 'OR' relationship">OR</span><br/><br/>
+</div>
+<span class="AND" title="Attributes across the boxed areas have an 'AND' relationship">AND</span><br/>
+<b><i>FUNCTION(s)</i></b>
+<div class="attributes" id="functions">
+<input type="button" name="sel" class="sel" value="Select All" onClick="selectAll('functions')" />&nbsp;&nbsp;
+<input type="button" name="nosel" class="nosel" value="Clear All" onClick="clearAll('functions')" />
+<span class="OR" title="Attributes within this area have an 'OR' relationship">OR</span><br/><br/>
+</div><br/>
+</div>
+
+<!--The table below creates individual tables containing user's most recent status and status information-->
+<b>STATUS:</b>
+<table id="tab" class="msgs" border=0 cellspacing=1 cellpadding=4></table>
+
+<script type="text/javascript">
+// call function to insert attribute lists to the web page
+insertAttribute (Chips, "listA", "chips"); 
+insertAttribute (Superblocks, "listB", "superblocks"); 
+insertAttribute (Blocks, "listC", "blocks"); 
+insertAttribute (Functions, "listD", "functions"); 
+
+// check cookies for previously checked attributes
+checkAttr_Cookie("chips", "listA");
+checkAttr_Cookie("superblocks", "listB");
+checkAttr_Cookie("blocks", "listC");
+checkAttr_Cookie("functions", "listD");
+</script>
+
+<hr style="width:100%"></hr>
+
+<div class="headers">
+<a href="http://stattool/stattracker.html">HOME</a>
+| <a href="http://stattool/addstatus.html">ADD STATUS</a>
+| <a style="text-align:center" href="http://stattool/statusreport.html">VIEW STATUS REPORT</a>
+| <a id="this" href="http://stattool/searchstatus.html">SEARCH STATUS</a>
+</div>
+
+</body>
+</html>

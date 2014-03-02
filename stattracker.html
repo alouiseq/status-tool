@@ -1,0 +1,211 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+
+<!--This HTML code displays the Status Tool design-->
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=9">
+
+<title>SiE Status Tool</title>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+
+<style type="text/css">
+/* sets the color of links */
+a:link {color:red;}
+a:visited {color:red;} 
+a#this {color:blue}
+
+/* centers the text (headers and footers) on web page */
+body { text-align:center; }
+
+h2 {margin:0px;padding:0px;}
+h4 {margin:10px;padding:0px;}
+
+/* clone & edit link */
+.edit {font-size:small;}
+
+/* centers the table on web page */
+table { margin:auto; }
+/* align table contents */
+table#tab { text-align:left; }
+
+/* specifies maximum size for table entries and allow scrolling */
+.scrollme { 
+   max-width:600px;
+   max-height:40px;
+   overflow:auto;
+}
+
+td.headers,td.headers_date {
+   background-color:#9090C0;
+   color:white;
+}
+td.entries,td.entries_date {
+   background-color:#EDEDFF;
+}
+
+/* separator between status information */
+td.headers_date,td.entries_date {
+   border-bottom-style:ridge;
+   border-bottom-width:thick; 
+   padding-bottom:20px;
+}
+</style>
+<script type="text/javascript">
+var dataAry = new Array();   // data array holding all user status entry information 
+
+// This function sends the status entry to another page to be displayed when the edit link is selected
+function sendData(e) {
+   var targ;
+   if (!e) var e = window.event;
+   if (e.target) targ = e.target;
+   else if (e.srcElement) targ = e.srcElement;
+   if (targ.nodeType == 3)  // defeat Safari bug
+      targ = targ.parentNode;
+
+   // Initialize variable packed or get the word 'undefined'; packed will contain the data to be transmitted to other html
+   var packed = "";
+   var data = dataAry[targ.id];   // retrieve status string from array based on selected link
+   packed = escape(data);   // escape is used to encode data to enable portability and transmission across networks
+
+   // location provides information about the current url and in this case,  
+   // the url is another html that will open and replace the current page
+   window.location = "editStatus.html?" + packed;  // ? indicates that what follows is a query string 
+} // end function sendData
+
+// function to create table and display user's status entries
+function display_entries (username) {
+   // Use XMLHttpRequest to read status report from a text file to a string
+   xmlhttp = new XMLHttpRequest();
+   xmlhttp.open("GET", "statusEntries.txt", true);
+   xmlhttp.send();
+
+   xmlhttp.onreadystatechange=function() {   // proceed only after server processes request to read text file
+      if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+	 var content = xmlhttp.responseText;   // read entries from text file
+	 var group = content.split("\n\n");    // separate individual status info from report
+	 var limit = 10;    // specifies the maximum number of status info to be displayed
+	 var count = 1;	 // starting count of number of status info to be displayed
+
+	 for (var x=group.length-1; x>=0; x--) {    // x is the last entry in the report to display recent to oldest
+	    if (count > limit) break;
+
+	    // only read and display entries from authenticated user 
+	    var user = group[x].match(/USER.*/);
+	    user = user[0].replace("USER: ","");
+	    if (user != username) continue;
+
+	    var table = document.getElementById('tab');  // obtain table element
+
+	    // insert row into table and insert status header as the first column of the table
+	    var tab_row = table.insertRow(-1);
+	    var status = tab_row.insertCell(-1);
+	    status.className = "headers";
+	    status.colSpan=2;
+	    status.innerHTML = "<b>Status</b>";
+
+	    // insert column and display user status entry from status report
+	    var entry = tab_row.insertCell(-1);
+	    entry.className = "entries";
+	    statusEntry = group[x].match(/ENTRY.*/);
+	    statusEntry = statusEntry[0].replace("ENTRY: ","");
+	    var node = document.createTextNode(statusEntry);
+	    var scroll = document.createElement('div');     // need div element to wrap content and allow scrolling
+	    scroll.className = "scrollme";                  // because table does not support scrolling 
+	    scroll.appendChild(node);
+	    entry.appendChild(scroll);
+
+	    // insert clone and edit link to edit status entries
+	    var edit = tab_row.insertCell(-1);
+	    edit.className = "edit";
+	    link = document.createElement('a');
+	    link.id = count;  // track which hyperlink is selected by user since each status entry is editable
+	    link.href = "#";   // significance??
+	    link.onclick = sendData;
+	    link.appendChild(document.createTextNode("CLONE/EDIT"));
+	    edit.appendChild(link);
+
+	    // insert row into table and insert attributes header as the first column of the table
+	    var tab_row = table.insertRow(-1);
+	    var attributes = tab_row.insertCell(-1);
+	    attributes.className = "headers";
+	    attributes.colSpan=2;
+	    attributes.innerHTML = "<b>Attributes</b>";
+
+	    // insert column and insert user attributes entry from status report
+	    var entry = tab_row.insertCell(-1);
+	    entry.className = "entries";
+	    statusTags = group[x].match(/TAGS.*/);
+	    statusTags = statusTags[0].replace("TAGS: ","");
+	    var node = document.createTextNode(statusTags);
+	    var scroll = document.createElement('div');     // need div element to wrap content and allow scrolling
+	    scroll.className = "scrollme";                  // because table does not support scrolling 
+	    scroll.appendChild(node);
+	    entry.appendChild(scroll);
+
+	    // insert row into table and insert date header as the first column of the table
+	    var tab_row = table.insertRow(-1);
+	    var date = tab_row.insertCell(-1);
+	    date.className = "headers_date";
+	    date.colSpan=2;
+	    date.innerHTML = "<b>Date</b>";
+
+	    // insert column and insert date from status report
+	    var entry = tab_row.insertCell(-1);
+	    entry.className = "entries_date";
+	    statusDate = group[x].match(/DATE.*/);
+	    statusDate = statusDate[0].replace("DATE: ","");
+	    var node = document.createTextNode(statusDate);
+	    entry.appendChild(node);
+
+	    dataAry[count] = statusEntry + "/" + statusTags + "/" + statusDate + "/" + "skip";   // place all status info into array
+	    count++;    // index to traverse through status report on text file
+	 } // end for loop
+      }
+   } // end xmlhttp response processing
+} // end function display_entries
+
+// Calls script to extract server authenticated user
+function extract_user() {
+   var username = "";     // contains the user accessing the status tracker website
+   $.ajax ({
+      url: "extract_user.cgi",
+      async: false,
+      success: function(result) {
+	  username = result;
+	  //alert(username);
+      },
+      error: function(xhr) {
+	 alert("Error reported back to dtracker.html");
+      }
+   });
+
+   // embed username on current webpage
+   var user_node = document.createTextNode(username);   // username is global and declared outside this function
+   document.getElementById('username').appendChild(user_node);
+   display_entries(username);     // call function to create table and display user's status information
+}
+</script>
+</head>
+
+<body onload="extract_user()">
+<h2><b>SiE Status Tool</b></h2>
+<h4><a id="this" href="http://stattool/stattracker.html">HOME</a>
+| <a href="http://stattool/addstatus.html">ADD STATUS</a>
+| <a href="http://stattool/statusreport.html">VIEW STATUS REPORT</a>
+| <a href="http://stattool/searchstatus.html">SEARCH STATUS</a></h4>
+
+<table><tr><td id="username">My Recent Status: &nbsp;</td></tr></table><br>
+
+<!--The table below creates individual tables containing user's most recent status and status information-->
+<table id="tab" class="msgs" border=0 cellspacing=1 cellpadding=4></table>
+
+<hr style="width:70%"></hr>
+
+<a id="this" href="http://stattool/stattracker.html">HOME</a>
+| <a href="http://stattool/addstatus.html">ADD STATUS</a>
+| <a href="http://stattool/statusreport.html">VIEW STATUS REPORT</a>
+| <a href="http://stattool/searchstatus.html">SEARCH STATUS</a>
+
+</body>
+</html>
