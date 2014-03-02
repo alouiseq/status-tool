@@ -1,0 +1,8 @@
+BACKGROUND:
+Status tool that provides user a simple UI to interact with to post daily task updates as well as project updates. The tool allows addition and update features for the user. Additional features such as searching user status and generating status reports are implemented for use by project and product managers. 
+
+TOOLS / LANGUAGES:
+HTML, CSS, Javascript, jQuery, AJAX, Perl, Unix
+
+IMPROVEMENTS:
+I developed this status tool from the ground up without utilizing web frameworks (outside of jQuery) within the deadlines and with limited web development knowledge. Much of the code can be refactored to create a more efficient and robust tool if more time could be alloted.
